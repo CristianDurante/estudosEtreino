@@ -13,11 +13,26 @@ namespace estudos_api.Controllers
         private static int IdMecanico = 1;
 
         //GET: api/Brinquedos
-        public IHttpActionResult Get()
+        [Route("api/brinquedos/{id}")]
+        public IHttpActionResult Get(int id)
         {
-            return Ok();
+            try
+            {
+                switch (id)
+                {
+                    case 1:
+                        return Ok(brinquedosEletrico);
+                    case 2:
+                        return Ok(brinquedosMecanico);
+                    default:
+                        return BadRequest("Tipo de brinquedo não encontrado.");
+                }
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-
 
         // GET: api/Brinquedos/5
         [HttpGet]
@@ -54,7 +69,6 @@ namespace estudos_api.Controllers
             return IdMecanico++;
         }
 
-
         // POST: api/Brinquedos
         public IHttpActionResult Post([FromBody]Brinquedo brinquedo)
         {
@@ -72,7 +86,7 @@ namespace estudos_api.Controllers
                         Id = getIdEletrico()
                     };
                     brinquedosEletrico.Add(brinquedoEletrico);
-                    break;
+                    return Ok(brinquedoEletrico);
                 case "mecanico":
                     var brinquedoMecanico = new BrinquedoMecanico
                     {
@@ -82,23 +96,82 @@ namespace estudos_api.Controllers
                         Id = getIdMecanico()
                     };
                     brinquedosMecanico.Add(brinquedoMecanico);
-                    break;
-
+                    return Ok(brinquedoMecanico);
                 default:
                     return BadRequest("Tipo de brinquedo inválido.");
             }
-            return Ok();
-
         }
 
         // PUT: api/Brinquedos/5
-        public void Put(int id, [FromBody]string value)
+        [Route("api/Brinquedos/{tipo}/{id}")]
+        public IHttpActionResult Put(string tipo, int id, [FromBody]Models.Brinquedo brinquedo)
         {
+            switch (tipo.ToLower())
+            {
+                case "eletrico":
+                    foreach (var brinquedos in brinquedosEletrico)
+                    {
+                        if (brinquedos.Id == id)
+                        {
+                            var brinquedoEletrico = new BrinquedoEletrico
+                            {
+                                Nome = brinquedo.Nome,
+                                IdadeMinima = brinquedo.IdadeMinima,
+                                Tipo = brinquedo.Tipo
+                            };
+                            return Ok(brinquedoEletrico);
+                        }
+                    }
+                    break;
+                case "mecanico":
+                    foreach (var brinquedos in brinquedosMecanico)
+                    {
+                        var brinquedoMecanico = new BrinquedoMecanico()
+                        {
+                            Nome = brinquedo.Nome,
+                            IdadeMinima = brinquedo.IdadeMinima,
+                            Tipo = brinquedo.Tipo
+                        };
+                        return Ok(brinquedoMecanico);
+                    }
+                    break;
+                default:
+                    return BadRequest("Tipo de brinquedo não encontrado.");
+            }
+            return NotFound();
         }
 
         // DELETE: api/Brinquedos/5
-        public void Delete(int id)
+        [Route("api/brinquedos/{tipo}/{id}")]
+        public IHttpActionResult Delete(string tipo, int id)
         {
+            switch (tipo.ToLower())
+            {
+                case "eletrico":
+                    foreach (var brinquedo in brinquedosEletrico)
+                    {
+                        if (brinquedo.Id == id)
+                        {
+                            brinquedosEletrico.Remove(brinquedo);
+                            return Ok(brinquedo);
+                        }
+                    }
+                    break;
+                case "mecanico":
+                    foreach (var brinquedo in brinquedosMecanico)
+                    {
+                        if (brinquedo.Id == id)
+                        {
+                            brinquedosMecanico.Remove(brinquedo);
+                            return Ok(brinquedo);
+                        }
+                    }
+                    break;
+                default:
+                    return BadRequest("Tipo de brinquedo não encontrado.");
+            }
+
+            return NotFound();
         }
     }
 }
