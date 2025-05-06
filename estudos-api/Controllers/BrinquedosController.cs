@@ -113,26 +113,27 @@ namespace estudos_api.Controllers
                     {
                         if (brinquedos.Id == id)
                         {
-                            var brinquedoEletrico = new BrinquedoEletrico
-                            {
-                                Nome = brinquedo.Nome,
-                                IdadeMinima = brinquedo.IdadeMinima,
-                                Tipo = brinquedo.Tipo
-                            };
-                            return Ok(brinquedoEletrico);
+                            brinquedos.Id = brinquedo.Id;
+                            brinquedos.Nome = brinquedo.Nome;
+                            brinquedos.IdadeMinima = brinquedo.IdadeMinima;
+                            brinquedos.Tipo = brinquedo.Tipo;
+                            
+                            return Ok(brinquedos);
                         }
                     }
                     break;
                 case "mecanico":
                     foreach (var brinquedos in brinquedosMecanico)
                     {
-                        var brinquedoMecanico = new BrinquedoMecanico()
+                        if (brinquedos.Id == id)
                         {
-                            Nome = brinquedo.Nome,
-                            IdadeMinima = brinquedo.IdadeMinima,
-                            Tipo = brinquedo.Tipo
-                        };
-                        return Ok(brinquedoMecanico);
+                            brinquedos.Id = brinquedo.Id;
+                            brinquedos.Nome = brinquedo.Nome;
+                            brinquedos.IdadeMinima = brinquedo.IdadeMinima;
+                            brinquedos.Tipo = brinquedo.Tipo;
+
+                            return Ok(brinquedos);
+                        }
                     }
                     break;
                 default:
@@ -170,7 +171,6 @@ namespace estudos_api.Controllers
                 default:
                     return BadRequest("Tipo de brinquedo não encontrado.");
             }
-
             return NotFound();
         }
     }
