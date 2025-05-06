@@ -69,7 +69,7 @@ namespace estudos_api.Controllers
                         Nome = brinquedo.Nome,
                         IdadeMinima = brinquedo.IdadeMinima,
                         Tipo = brinquedo.Tipo,
-                        Id = getIdMecanico()
+                        Id = getIdEletrico()
                     };
                     brinquedosEletrico.Add(brinquedoEletrico);
                     break;
